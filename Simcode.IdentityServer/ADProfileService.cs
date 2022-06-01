@@ -34,9 +34,22 @@ namespace Simcode.IdentityServer
 
         public Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
-            context.LogProfileRequest(_logger);
-            context.AddRequestedClaims(context.Subject.Claims);
-            context.LogIssuedClaims(_logger);
+            //context.LogProfileRequest(_logger);
+
+            // VALTEMP
+            //context.AddRequestedClaims(context.Subject.Claims);
+            var ret = new HashSet<Claim>(new ClaimComparer());
+            ret.Add(new Claim(JwtClaimTypes.Id, "1", ClaimValueTypes.Integer));
+            ret.Add(new Claim(JwtClaimTypes.Name, "Name"));
+            ret.Add(new Claim(JwtClaimTypes.GivenName, @"FirstName"));
+            ret.Add(new Claim(JwtClaimTypes.MiddleName, @"MiddleName"));
+            ret.Add(new Claim(JwtClaimTypes.FamilyName, @"LastName"));
+            ret.Add(new Claim("pers_number", @"1"));
+            ret.Add(new Claim("office", @"Office.Name"));
+            ret.Add(new Claim(JwtClaimTypes.Role, @"RoleAdmin"));
+            context.AddRequestedClaims(ret);
+
+            //context.LogIssuedClaims(_logger);
 
             return Task.CompletedTask;
         }

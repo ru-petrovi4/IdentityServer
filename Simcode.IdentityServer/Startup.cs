@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Simcode.IdentityServer
 {
@@ -43,15 +44,23 @@ namespace Simcode.IdentityServer
             builder.AddInMemoryIdentityResources(IdentityServerConfig.IdentityResources);
             builder.AddInMemoryApiScopes(IdentityServerConfig.ApiScopes);
             builder.AddInMemoryClients(IdentityServerConfig.Clients);
+            builder.AddInMemoryApiResources(IdentityServerConfig.ApiResources);            
 
             // TEMPFIX
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
+
+            builder.AddProfileService<ADProfileService>();            
             builder.AddResourceOwnerValidator<ResourceOwnerPasswordValidator>();
 
             services.AddAuthentication();
-            
-            services.AddScoped<IProfileService, ADProfileService>();
+
+            services.AddCors();
+            var cors = new DefaultCorsPolicyService(new LoggerFactory().CreateLogger<DefaultCorsPolicyService>())
+            {
+                AllowAll = true
+            };
+            services.AddSingleton<ICorsPolicyService>(cors);            
         }
 
         public void Configure(IApplicationBuilder app)
@@ -61,6 +70,7 @@ namespace Simcode.IdentityServer
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors(a => a.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseStaticFiles();
 
             app.UseRouting();

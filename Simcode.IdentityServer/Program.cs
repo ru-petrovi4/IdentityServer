@@ -43,17 +43,7 @@ namespace Simcode.IdentityServer
                     )
                 .ConfigureWebHostDefaults(
                     webBuilder =>
-                    {
-                        webBuilder.ConfigureKestrel(options =>
-                        {
-                            options.Listen(IPAddress.Any,
-                                60050,
-                                listenOptions =>
-                                {
-                                    listenOptions.UseConnectionLogging();
-                                    //listenOptions.UseHttps();
-                                });
-                        });
+                    {                        
                         webBuilder.UseStartup<Startup>();
                     })
                 .ConfigureServices((hostContext, services) =>

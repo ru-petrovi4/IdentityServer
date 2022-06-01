@@ -1,8 +1,4 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-
-
-using IdentityModel;
+﻿using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Models;
 using System.Collections.Generic;
@@ -26,8 +22,8 @@ namespace Simcode.IdentityServer
                         JwtClaimTypes.MiddleName,
                         JwtClaimTypes.FamilyName,
                         JwtClaimTypes.Role,
-                        //SimClaimTypes.PersonnelNumber,
-                        //SimClaimTypes.Office,
+                        "pers_number",
+                        "office",
                     })
             };
 
@@ -100,16 +96,16 @@ namespace Simcode.IdentityServer
                 //},
             };
 
-        //public static IEnumerable<ApiResource> ApiResources =>
-        //    new List<ApiResource>
-        //    {
-        //        new ApiResource("userapi", "Users management API", new[] {JwtClaimTypes.Role})
-        //        {
-        //            ApiSecrets = new List<Secret>
-        //            {
-        //                new Secret("intro".Sha256())
-        //            }
-        //        }
-        //    };
+        public static IEnumerable<ApiResource> ApiResources =>
+            new List<ApiResource>
+            {
+                new ApiResource("userapi", "Users management API", new[] {JwtClaimTypes.Role})
+                {
+                    ApiSecrets = new List<Secret>
+                    {
+                        new Secret("intro".Sha256())
+                    }
+                }
+            };
     }
 }

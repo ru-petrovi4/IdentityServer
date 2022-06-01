@@ -45,25 +45,35 @@ namespace Simcode.IdentityServer
         {
             // VALTEMP
             // For developers
-            if (context.UserName == "1" && context.Password == @"1")
+            if (context.UserName == "mngr" && context.Password == @"mngr1")
             {
                 var groups = new HashSet<string>() { "PazCheckAdmins" };
 
-                var claims = new[]
-                    {
-                        new Claim(JwtClaimTypes.Name, "Сидор Сидоров"),
-                        new Claim(JwtClaimTypes.GivenName, "Сидоров"),
-                        new Claim(JwtClaimTypes.FamilyName, "Сидоров"),
-                        new Claim(JwtClaimTypes.Email, ""),
-                        //new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),                            
-                        new Claim(JwtClaimTypes.Role, JsonSerializer.Serialize(groups), IdentityServerConstants.ClaimValueTypes.Json)
-                    };
+                // VALTEMP
+                //var claims = new[]
+                //    {
+                //        new Claim(JwtClaimTypes.Name, "Сидор Сидоров"),
+                //        new Claim(JwtClaimTypes.GivenName, "Сидоров"),
+                //        new Claim(JwtClaimTypes.FamilyName, "Сидоров"),
+                //        new Claim(JwtClaimTypes.Email, ""),
+                //        //new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),                            
+                //        new Claim(JwtClaimTypes.Role, JsonSerializer.Serialize(groups), IdentityServerConstants.ClaimValueTypes.Json)
+                //    };
+                var ret = new HashSet<Claim>(new ClaimComparer());
+                ret.Add(new Claim(JwtClaimTypes.Id, "1", ClaimValueTypes.Integer));
+                ret.Add(new Claim(JwtClaimTypes.Name, "Name"));
+                ret.Add(new Claim(JwtClaimTypes.GivenName, @"FirstName"));
+                ret.Add(new Claim(JwtClaimTypes.MiddleName, @"MiddleName"));
+                ret.Add(new Claim(JwtClaimTypes.FamilyName, @"LastName"));
+                ret.Add(new Claim("pers_number", @"1"));
+                ret.Add(new Claim("office", @"Office.Name"));
+                ret.Add(new Claim(JwtClaimTypes.Role, @"RoleAdmin"));
 
                 string subjectId = context.UserName;
                 context.Result = new GrantValidationResult(
                     subjectId,
                     OidcConstants.AuthenticationMethods.Password, _clock.UtcNow.UtcDateTime,
-                    claims);
+                    ret);
             }
 
             string activeDirectory_Server = _configuration.GetValue<string>("ActiveDirectory_Server");
