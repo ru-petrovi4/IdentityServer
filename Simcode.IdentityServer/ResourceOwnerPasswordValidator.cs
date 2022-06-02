@@ -76,6 +76,8 @@ namespace Simcode.IdentityServer
                     subjectId,
                     OidcConstants.AuthenticationMethods.Password, _clock.UtcNow.UtcDateTime,
                     ret);
+
+                return;
             }
 
             string activeDirectory_Server = _configuration.GetValue<string>("ActiveDirectory_Server");
