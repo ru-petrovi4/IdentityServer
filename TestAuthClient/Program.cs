@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Threading.Tasks;
 using IdentityModel.Client;
@@ -27,7 +28,7 @@ namespace TestAuthClient
                 
             };
 
-            var discoveryDocumentResponse = await httpClient.GetDiscoveryDocumentAsync("http://localhost:60050");
+            var discoveryDocumentResponse = await httpClient.GetDiscoveryDocumentAsync("http://localhost:50000");
             if (discoveryDocumentResponse.IsError)
             {
                 Console.WriteLine(discoveryDocumentResponse.Error);
@@ -40,8 +41,8 @@ namespace TestAuthClient
                 Address = discoveryDocumentResponse.TokenEndpoint,
                 ClientId = "userfront",
                 Scope = "openid custom.profile userapi",
-                UserName = "1",//"pcadmin",
-                Password = "1"
+                UserName = "mngr",//"pcadmin",
+                Password = "mngr1"
             });
             if (tokenResponse.IsError)
             {
@@ -51,6 +52,10 @@ namespace TestAuthClient
 
             Console.WriteLine(tokenResponse.Json);
             Console.WriteLine("\n\n");
+
+            //var handler = new JwtSecurityTokenHandler();
+            //var jsonToken = handler.ReadToken(tokenResponse.Raw);
+            //var tokenS = jsonToken as JwtSecurityToken;
 
             // call api
             var apiHttpClient = new HttpClient(httpClientHandler);
